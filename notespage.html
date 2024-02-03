@@ -1,0 +1,118 @@
+<!-- notes.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Your existing styles, meta tags, and external resources... -->
+    <link rel="stylesheet" href="./style.css" />
+    <title>Notes</title>
+
+    <style>
+
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+      :root {
+        --normal-font: 1.3em;
+        --header-font: 1.7em;
+        --mobile-normal-font: 1em;
+        --button-padding: 0.5em;
+        --input-padding: 0.5em 1em;
+      }
+
+      /* Background */
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        background-color: #176B87;
+        color: rgb(255, 255, 255);
+        font-family: "Poppins", sans-serif;
+      }
+
+      .notes-button {
+        margin-top: 1em !important;
+        border-radius: 30px !important;
+      }
+
+      .notes-button::before {
+        clip-path: inset(0 100% 0 0);
+        background: white;
+        opacity: 1;
+        transition: 0.4s;
+      }
+
+      .notes-button:hover::before {
+        clip-path: inset(0 0 0 0);
+      }
+
+
+      .notes-button::before {
+        border-radius: 30px !important;
+      }
+
+      .notes-button {
+        width: 100%;
+        margin: 0 auto;
+        font-weight: bold;
+        font-size: var(--normal-font);
+        padding: var(--button-padding);
+        background: #176B87;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25),
+          -5px -5px 10px rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        outline: none;
+        border: none;
+        transition: all 0.5s;
+        cursor: pointer;
+        transform: perspective(1px) translateZ(0);
+      }
+
+
+      .notes-button::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+      }
+      
+
+      .notes-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1em;
+        color: white;
+      }
+
+      /* media query */
+      @media screen and (max-width: 700px) {
+        .main-login-form {
+          padding: 2em 1em;
+        }
+
+        .line {
+          width: 7em;
+        }
+        .notes-button{
+          font-size: var(--mobile-normal-font);
+        }
+      }
+
+      
+    </style>
+
+</head>
+<body>
+    <div class="main-notes">
+        <button class="notes-button" onclick="navigateTo('class9-page.html')">Class 9</button>
+        <button class="notes-button" onclick="navigateTo('class9-page.html')">Class 10</button>
+        <button class="notes-button" onclick="navigateTo('class9-page.html')">Class 11</button>
+        <button class="notes-button" onclick="navigateTo('class9-page.html')">Class 12</button>
+    </div>
+    <script>
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Your existing styles, meta tags, and external resources... -->
+    <style>
+
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+      :root {
+        --normal-font: 1.3em;
+        --header-font: 1.7em;
+        --mobile-normal-font: 1em;
+        --button-padding: 0.5em;
+        --input-padding: 0.5em 1em;
+      }
+
+      /* Background */
+
+      body {
+        min-height: 80vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        background-color: #176B87;
+        color: white;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background-color: #176B87;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .feed-container {
+        max-width: 600px;
+        margin: 0 auto;
+      }
+
+      .post {
+        background: #176B87;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25),
+          -5px -5px 10px rgba(255, 255, 255, 0.15);
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        display: none;
+        color: white;
+      }
+
+      .post.active {
+        display: block;
+      }
+
+      h2 {
+        font-size: var(--normal-font);
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-size: var(--normal-font);
+      }
+
+      .toggle-button,
+      .input-field,
+      .file-input,
+      .submit-button {
+        background: #176B87;
+        box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25),
+          -5px -5px 10px rgba(255, 255, 255, 0.15);
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        margin: 10px;
+        cursor: pointer;
+        color: white;
+        font-size: var(--normal-font);
+        transition: all 0.5s;
+      }
+
+      .file-input {
+        width: 70%;
+      }
+
+      .submit-button {
+        width: 30%;
+      }
+
+      .submit-button:hover {
+        background: #124E63; /* Darker shade on hover */
+      }
+
+      .toggle-button:hover {
+        background: #124E63; /* Darker shade on hover */
+      }
+
+      /* media query */
+      @media screen and (max-width: 700px) {
+        .feed-container {
+          padding: 2em 1em;
+        }
+
+        .line {
+          width: 7em;
+        }
+        .submit-button,
+        .toggle-button,
+        .file-input,
+        .input-field,
+        .post1 {
+          font-size: var(--mobile-normal-font);
+        }
+      }
+
+    </style>
+
+    <title>Social One Page</title>
+  </head>
+  <body>
+    <div class="feed-container">
+      <div class="post active" id="post1">
+        <h2>Post Title 1</h2>
+        <p>Content of the first post goes here.</p>
+        <img src="placeholder.jpg" alt="Image 1" width="300">
+      </div>
+
+      <div class="post" id="post2">
+        <h2>Post Title 2</h2>
+        <p>Content of the second post goes here.</p>
+        <img src="placeholder.jpg" alt="Image 2" width="300">
+      </div>
+
+      <form id="userInputForm" enctype="multipart/form-data">
+        <input type="text" class="input-field" id="userInput" placeholder="Type your post here">
+        <input type="file" class="file-input" id="imageInput" accept="image/*">
+        <button type="button" class="submit-button" onclick="addUserPost()">Submit</button>
+      </form>
+
+      <button class="toggle-button" onclick="togglePosts()">Toggle Posts</button>
+    </div>
+
+    <script>
+      function togglePosts() {
+        // Toggle between posts
+        const post1 = document.getElementById('post1');
+        const post2 = document.getElementById('post2');
+
+        post1.classList.toggle('active');
+        post2.classList.toggle('active');
+      }
+
+      function addUserPost() {
+        // Add user's post dynamically
+        const userInput = document.getElementById('userInput').value;
+        const imageInput = document.getElementById('imageInput');
+        const imageFile = imageInput.files[0];
+
+        if (userInput || imageFile) {
+          const newPost = document.createElement('div');
+          newPost.classList.add('post', 'active');
+
+          const title = document.createElement('h2');
+          title.innerText = 'User Post';
+          newPost.appendChild(title);
+
+          const content = document.createElement('p');
+          content.innerText = userInput;
+          newPost.appendChild(content);
+
+          if (imageFile) {
+            const image = document.createElement('img');
+            image.src = URL.createObjectURL(imageFile);
+            image.alt = 'User Image';
+            image.width = 300;
+            newPost.appendChild(image);
+          }
+
+          // Insert the new post before the toggle button
+          const toggleButton = document.querySelector('.toggle-button');
+          toggleButton.parentNode.insertBefore(newPost, toggleButton);
+
+
+
+
+          const backendURL = 'mongodb://localhost:27017/Blog'; // Update this with your backend URL
+
+          async function togglePosts() {
+            // Toggle between posts
+            const post1 = document.getElementById('post1');
+            const post2 = document.getElementById('post2');
+
+            post1.classList.toggle('active');
+            post2.classList.toggle('active');
+          }
+
+          async function addUserPost() {
+            // Add user's post dynamically
+            const userInput = document.getElementById('userInput').value;
+            const imageInput = document.getElementById('imageInput').files[0];
+
+            if (userInput || imageInput) {
+              try {
+                const formData = new FormData();
+                formData.append('title', 'User Post');
+                formData.append('content', userInput);
+
+                if (imageInput) {
+                  formData.append('image', imageInput);
+                }
+
+                const response = await fetch(`${backendURL}/posts`, {
+                  method: 'POST',
+                  body: formData,
+                });
+
+                if (response.ok) {
+                  const newPostData = await response.json();
+
+                  const newPost = document.createElement('div');
+                  newPost.classList.add('post', 'active');
+
+                  const title = document.createElement('h2');
+                  title.innerText = newPostData.title;
+                  newPost.appendChild(title);
+
+                  const content = document.createElement('p');
+                  content.innerText = newPostData.content;
+                  newPost.appendChild(content);
+
+                  if (newPostData.imageUrl) {
+                    const image = document.createElement('img');
+                    image.src = `${backendURL}/${newPostData.imageUrl}`;
+                    image.alt = 'User Image';
+                    image.width = 300;
+                    newPost.appendChild(image);
+                  }
+
+                  // Insert the new post before the toggle button
+                  const toggleButton = document.querySelector('.toggle-button');
+                  toggleButton.parentNode.insertBefore(newPost, toggleButton);
+                } else {
+                  console.error('Failed to add post:', response.statusText);
+                }
+              } catch (error) {
+                console.error('Error adding post:', error.message);
+              }
+            }
+          }
+        }
+      }
+    </script>
+  </body>
+</html>
